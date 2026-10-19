@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 textNode.appendData(characters[i]);
                 letterBody.parentElement.scrollTop = letterBody.parentElement.scrollHeight;
                 i++;
-                setTimeout(tick, 9);
+                setTimeout(tick, 16);
             } else {
                 // Done → show "Xem" button + start photo float
                 letterBody.parentElement.scrollTop = 0;
