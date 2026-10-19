@@ -1,0 +1,10 @@
+const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
+const drawing=new Proxy({createRadialGradient:()=>({addColorStop(){}})},{get:(obj,key)=>key in obj?obj[key]:()=>{}});
+const context={innerWidth:1180,innerHeight:788,devicePixelRatio:1,matchMedia:()=>({matches:false}),window:{addEventListener(){}},performance:{now:()=>0},Math,HTMLElement:class{}};
+vm.createContext(context);vm.runInContext(fs.readFileSync('tree.js','utf8')+'\nthis.Tree=HeartTree;',context);
+const tree=new context.Tree({style:{},addEventListener(){},getContext:()=>drawing});
+for(let i=0;i<40;i++)tree.landHeart({size:12,color:'#ef5da8',angle:0,born:0},800+i,1);
+assert.equal(tree.restingHearts.length,15);assert.equal(tree.landings.length,24);
+tree.drawGround(840,10);tree.drawRestingHearts(1.5);tree.drawLandings(1.4);
+tree.drawRestingHearts(10);tree.drawLandings(10);assert.equal(tree.restingHearts.length,0);assert.equal(tree.landings.length,0);
+console.log('PASS: ground drawing, ripple rendering, 15-heart cap and complete effect cleanup.');

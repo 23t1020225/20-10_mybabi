@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Ngày 20/10 Em Yêu ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@600;700&family=Quicksand:wght@500;600;700&family=Comfortaa:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Background Audio -->
+    <audio id="bg-audio" loop preload="auto">
+        <source src="music.m4a" type="audio/mp4">
+        <source src="music.aac" type="audio/aac">
+    </audio>
+
+    <!-- Music toggle -->
+    <button type="button" class="music-disc-btn" id="music-btn" title="Bật/Tắt nhạc" aria-label="Bật/Tắt nhạc">
+        <span class="disc-icon">🎵</span>
+    </button>
+
+    <!-- ───────────── STAGE 1: PUZZLE ───────────── -->
+    <section id="stage-puzzle" class="stage">
+        <!-- Canvas falling petals -->
+        <canvas id="petal-canvas"></canvas>
+
+        <div class="puzzle-wrapper" id="puzzle-mount">
+            <!-- Rendered by puzzle.js -->
+        </div>
+    </section>
+
+    <!-- ───────────── STAGE 2: TREE + LETTER ───────────── -->
+    <section id="stage-main" class="stage" style="display:none;">
+
+        <!-- Full-screen canvas for the blooming heart tree -->
+        <canvas id="tree-canvas"></canvas>
+
+        <!-- Love Letter Panel -->
+        <div class="letter-card" id="letter-card">
+            <div class="letter-scroll-sheet">
+            <!-- Header -->
+            <div class="letter-header-bar">
+                <div class="letter-header-left">
+                    <span class="letter-header-flower">🌸</span>
+                    <div class="letter-header-divider"></div>
+                    <span class="letter-header-title">❤ Thư Gửi Em Yêu ❤</span>
+                </div>
+                <div class="love-stamp">
+                    <span class="stamp-heart">♥</span>
+                    <span class="stamp-text">love</span>
+                </div>
+            </div>
+
+            <!-- Paper with lined background -->
+            <div class="letter-paper-content">
+                <div class="letter-body" id="letter-body"></div>
+
+                <!-- Floating photo (auto-cycles while letter is shown) -->
+                <div class="letter-photo-float" id="letter-photo-float">
+                    <img id="letter-float-img" src="images/anh1.JPG" alt="Kỷ niệm">
+                </div>
+
+                <!-- Bunny sticker at bottom-right -->
+                <div class="letter-bunny">
+                    <svg viewBox="0 0 100 100" class="bunny-svg">
+                        <!-- Ears -->
+                        <ellipse cx="38" cy="24" rx="8"   ry="18"   fill="#fff" stroke="#f080a0" stroke-width="2.5"/>
+                        <ellipse cx="38" cy="24" rx="4.5" ry="12"   fill="#ffb6c1"/>
+                        <ellipse cx="62" cy="24" rx="8"   ry="18"   fill="#fff" stroke="#f080a0" stroke-width="2.5"/>
+                        <ellipse cx="62" cy="24" rx="4.5" ry="12"   fill="#ffb6c1"/>
+                        <!-- Head -->
+                        <circle  cx="50"  cy="58" r="30"  fill="#fff" stroke="#f080a0" stroke-width="2.5"/>
+                        <!-- Eyes -->
+                        <circle  cx="42"  cy="52" r="3.5" fill="#333"/>
+                        <circle  cx="58"  cy="52" r="3.5" fill="#333"/>
+                        <!-- Cheeks -->
+                        <circle  cx="36"  cy="60" r="5"   fill="#ffb6c1" opacity=".8"/>
+                        <circle  cx="64"  cy="60" r="5"   fill="#ffb6c1" opacity=".8"/>
+                        <!-- Nose & mouth -->
+                        <circle  cx="50"  cy="58" r="2"   fill="#f080a0"/>
+                        <path d="M47 62 Q50 65 53 62" stroke="#f080a0" stroke-width="1.8" fill="none"/>
+                        <!-- Heart in paw -->
+                        <circle  cx="50"  cy="74" r="7"   fill="#ff4081"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Footer "Xem" button -->
+            <div class="letter-footer">
+                <button class="view-btn" id="view-photos-btn" type="button">Xem ảnh</button>
+                <button class="roll-letter-btn" id="roll-letter-btn" type="button" hidden>⌃ Cuộn thư lại ⌃</button>
+            </div>
+            </div>
+            <div class="paper-roll-edge" aria-hidden="true"></div>
+        </div>
+
+        <section class="keepsake-panel" id="keepsake-home" aria-label="Hộp kỷ niệm" hidden>
+            <div class="keepsake-heart" aria-hidden="true">♥</div>
+            <p class="keepsake-eyebrow">CHIẾC HỘP KỶ NIỆM</p>
+            <h1>Mở một điều dễ thương</h1>
+            <div class="keepsake-folders">
+                <button type="button" class="keepsake-folder" data-keepsake="letter"><span aria-hidden="true">💌</span><strong>Lá thư của anh</strong><small>Đọc lại một chút thương</small></button>
+                <button type="button" class="keepsake-folder" data-keepsake="album"><span aria-hidden="true">📷</span><strong>Album của em</strong><small>Những nụ cười anh thích</small></button>
+                <button type="button" class="keepsake-folder" data-keepsake="notes"><span aria-hidden="true">📝</span><strong>Lời nhắn nhỏ</strong><small>Dành cho một ngày bất kỳ</small></button>
+                <button type="button" class="keepsake-folder" data-keepsake="wishes"><span aria-hidden="true">✨</span><strong>Điều mình sẽ làm</strong><small>Những cuộc hẹn phía trước</small></button>
+            </div>
+            <p class="keepsake-caption">Mỗi ngăn là một chút thương dành cho em ♡</p>
+        </section>
+        <section class="keepsake-panel keepsake-detail" id="keepsake-detail" aria-label="Ngăn kỷ niệm" hidden>
+            <button class="keepsake-back" type="button" id="keepsake-back">← Về hộp kỷ niệm</button>
+            <div id="keepsake-content"></div>
+        </section>
+        <p id="keepsake-status" class="sr-only" aria-live="polite"></p>
+    </section>
+
+    <!-- ───────────── LIGHTBOX MODAL ───────────── -->
+    <div class="lightbox-modal" id="lightbox-modal" role="dialog" aria-label="Ảnh kỷ niệm" aria-modal="true">
+        <div class="lightbox-box">
+            <button class="lightbox-close" id="lightbox-close">✕</button>
+            <div class="lightbox-polaroid">
+                <img id="lightbox-img" alt="">
+            </div>
+        </div>
+    </div>
+
+    <script src="petals.js"></script>
+    <script src="tree.js"></script>
+    <script src="puzzle.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
