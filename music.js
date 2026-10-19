@@ -12,6 +12,15 @@
     let started = false;
     let userPaused = false;
     let playPending = false;
+    // Reserve the dock's actual height so expanding volume never covers the tree.
+    const phoneLayout = matchMedia('(max-width: 600px)');
+    function sizeDock() {
+        document.documentElement.style.setProperty('--music-dock-height', phoneLayout.matches ? `${Math.ceil(player.getBoundingClientRect().height)}px` : '0px');
+    }
+    new ResizeObserver(sizeDock).observe(player);
+    phoneLayout.addEventListener('change', sizeDock);
+    window.addEventListener('resize', sizeDock);
+    sizeDock();
     audio.volume = Number(volume.value) / 100;
 
     function sync() {

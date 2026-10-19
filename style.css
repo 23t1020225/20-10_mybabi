@@ -687,3 +687,28 @@ html, body {
  .music-player #music-details { margin-top:5px; padding-top:5px; }
  #music-details p { display:none; }
 }
+/* Mobile dock occupies its own band; both stages end above it. */
+@media(max-width:600px) {
+ :root { --music-dock-height:82px; }
+ #stage-main,#stage-puzzle { top:0; bottom:var(--music-dock-height); height:calc(100dvh - var(--music-dock-height)); }
+ .music-player,.music-player:has(#music-details:not([hidden])) {
+  width:100%; left:0; right:0; bottom:0; border:0; border-top:1px solid #ead0df; border-radius:0;
+  padding:11px max(12px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left));
+  background:#fff9fc; box-shadow:0 -5px 16px #be8ba00b;
+ }
+ .music-main,.music-player:has(#music-details:not([hidden])) .music-main { gap:10px; max-width:480px; margin:auto; justify-content:initial; }
+ .music-info { display:block; }
+ .music-info strong,.music-player:has(#music-details:not([hidden])) .music-info strong { font-size:18px; }
+ .music-status { font-size:10px; line-height:1.4; }
+ #music-status,.music-player:has(#music-details:not([hidden])) #music-status { display:inline; font-size:10px; }
+ .music-status:after { display:none; }
+ .music-player .music-expand { margin-left:0; }
+ #music-details { max-width:480px; margin:11px auto 0; padding-top:8px; }
+ #music-details p { margin:6px 0 0; }
+ .puzzle-card { width:min(380px,86vw,calc((100dvh - var(--music-dock-height) - 100px)*.62)); }
+}
+@media(max-width:350px) {
+ .music-main,.music-player:has(#music-details:not([hidden])) .music-main { gap:6px; }
+ .music-info strong,.music-player:has(#music-details:not([hidden])) .music-info strong { font-size:16px; }
+ .music-status,#music-status { font-size:9px; }
+}

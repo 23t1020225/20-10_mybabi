@@ -25,13 +25,14 @@ class HeartTree {
         });
         this.colors = ['#fa0063','#ee009f','#ff5ab7','#fb91c3','#e81a39','#ffef35','#ffd33e','#f68b37','#ffb779','#c5009c'];
         this.resize = () => {
-            this.W = innerWidth; this.H = innerHeight;
+            this.W = canvas.parentElement.clientWidth; this.H = canvas.parentElement.clientHeight;
             const dpr = Math.min(devicePixelRatio || 1, 2);
             canvas.width = this.W*dpr; canvas.height = this.H*dpr;
             canvas.style.width = this.W+'px'; canvas.style.height = this.H+'px';
             this.ctx.setTransform(dpr,0,0,dpr,0,0);
         };
         this.resize(); window.addEventListener('resize',this.resize);
+        new ResizeObserver(this.resize).observe(canvas.parentElement);
     }
     start() {
         this.started = performance.now(); this.notified = false; this.leaves = []; this.falling = []; this.landings = []; this.bursts = []; this.restingHearts = [];
@@ -170,7 +171,7 @@ class HeartTree {
         const c=this.ctx, mobile=this.W<601;
         c.clearRect(0,0,this.W,this.H); c.save();
         let sx=this.W/1180,sy=this.H/788,ox=0,oy=0;
-        if(mobile) { const s=Math.min(this.W/680,this.H*.43/740); sx=sy=s;ox=this.W/2-590*s;oy=this.H*.58; }
+        if(mobile) { const s=Math.min(this.W/680,this.H*.40/740); sx=sy=s;ox=this.W/2-590*s;oy=this.H*.58; }
         c.translate(ox,oy);c.scale(sx,sy);
         this.hitHearts=[];
         const shift=Math.min(1,Math.max(0,(t-7)/1.4));
