@@ -28,24 +28,9 @@ const PHOTOS = [
     'images/anh15.JPG',
 ];
 
-let musicStarted   = false;
 let photoIndex     = 0;
 let lightboxIndex  = 0;
 let stopPetals     = null;
-
-// ── Music ─────────────────────────────────────────────────────────
-window.startMusic = function () {
-    if (musicStarted) return;
-    const audio = document.getElementById('bg-audio');
-    if (!audio) return;
-    audio.volume = 0.85;
-    audio.play()
-        .then(() => {
-            musicStarted = true;
-            document.getElementById('music-btn')?.classList.add('playing');
-        })
-        .catch(() => {});
-};
 
 document.addEventListener('DOMContentLoaded', () => {
     const stagePuzzle = document.getElementById('stage-puzzle');
@@ -60,8 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightbox    = document.getElementById('lightbox-modal');
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxClose = document.getElementById('lightbox-close');
-    const musicBtn    = document.getElementById('music-btn');
-    const bgAudio     = document.getElementById('bg-audio');
     stageMain.appendChild(floatPhoto);
     document.querySelector('.letter-footer').appendChild(document.querySelector('.letter-bunny'));
     const characters = Array.from(LETTER_TEXT);
@@ -74,17 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let rolling = false;
     let photoEnabled = false;
     let returnFocus = viewBtn;
-
-    // ── Music button toggle
-    musicBtn.addEventListener('click', e => {
-        e.stopPropagation();
-        if (bgAudio.paused) {
-            bgAudio.play().then(() => { musicStarted = true; musicBtn.classList.add('playing'); }).catch(() => {});
-        } else {
-            bgAudio.pause();
-            musicBtn.classList.remove('playing');
-        }
-    });
 
     // ── Start petals during puzzle
     if (petalCanvas) {

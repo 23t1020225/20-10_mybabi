@@ -616,3 +616,74 @@ html, body {
  .letter-card.rolling-up,.keepsake-panel { animation:none; }
  .album-photo { transition:none; }
 }
+/* Mini record player, compact beneath the tree on small screens. */
+.music-player { position:fixed; right:max(18px,env(safe-area-inset-right)); bottom:max(16px,env(safe-area-inset-bottom)); z-index:200; width:min(415px,calc(100vw - 28px)); padding:12px 14px; border:1px solid #e8ccd9; border-radius:21px; background:#fff9fbf5; color:#694354; box-shadow:0 8px 28px #88506b1c,inset 0 1px #fff; }
+.music-main { display:flex; align-items:center; gap:11px; }
+.music-player button { font:inherit; color:#86536b; cursor:pointer; flex-shrink:0; }
+.record-button { position:relative; display:grid; place-items:center; width:66px; height:66px; padding:3px; border:0; background:transparent; }
+.record { position:relative; display:grid; place-items:center; width:59px; height:59px; border-radius:50%; background:repeating-radial-gradient(circle,#563847 0 1px,#3a2934 2px 3px,#684453 4px 4.5px); box-shadow:0 3px 5px #492c3c35,inset 0 0 0 3px #46313b; animation:spinDisc 7s linear infinite; animation-play-state:paused; }
+.record:after { content:''; position:absolute; inset:0; border-radius:50%; background:conic-gradient(transparent 0deg,#fff2 40deg,transparent 75deg,transparent 170deg,#fff2 220deg,transparent 255deg); }
+.record-label { display:grid; place-items:center; width:25px; height:25px; background:radial-gradient(circle,#f2c0d3,#d692b0); border:1px solid #c986a0; border-radius:50%; color:#8f4563; font:14px Georgia,serif; }
+.record-needle { position:absolute; width:4px; height:38px; top:3px; right:1px; transform:rotate(-9deg); transform-origin:top; background:linear-gradient(90deg,#be999b,#f2dbd4,#bb9698); border-radius:3px; box-shadow:0 1px 2px #824b6240; transition:transform .5s; pointer-events:none; }
+.record-needle:after { content:''; position:absolute; width:7px; height:10px; bottom:-4px; left:-1px; border-radius:2px; background:#85576b; }
+.music-info { flex:1; min-width:0; }
+.music-eyebrow { display:block; color:#9b6f83; font-size:8px; letter-spacing:1.2px; margin-bottom:5px; }
+.music-info strong { display:block; color:#713f56; font:600 20px 'Dancing Script',cursive; }
+.music-status { display:flex; align-items:center; gap:6px; margin-top:8px; color:#93677d; font-size:9px; min-height:14px; }
+.music-wave { display:flex; align-items:center; gap:2px; height:14px; }
+.music-wave i { width:2px; height:4px; border-radius:2px; background:#c47b9a; animation:musicWave .8s ease-in-out infinite alternate; animation-play-state:paused; }
+.music-wave i:nth-child(2) { animation-delay:-.3s; }.music-wave i:nth-child(3) { animation-delay:-.6s; }.music-wave i:nth-child(4) { animation-delay:-.1s; }
+.music-player .music-play { display:grid; place-items:center; width:39px; height:39px; background:linear-gradient(135deg,#edc2d5,#d99ab7); border:1px solid #d49bb4; border-radius:50%; font-size:15px; }
+.music-player .music-expand { width:28px; min-height:44px; font-size:23px; background:transparent; border:0; }
+.music-player.playing .record,.music-player.playing .music-wave i { animation-play-state:running; }
+.music-player.playing .record-needle { transform:rotate(20deg); }
+#music-details { border-top:1px solid #f0dde6; margin-top:12px; padding-top:14px; }
+.music-volume { display:flex; align-items:center; gap:12px; padding:0 6px; color:#a76b89; }
+.music-volume input { flex:1; min-width:0; height:4px; accent-color:#c789a8; cursor:pointer; }
+.music-volume output { font-size:11px; min-width:30px; }
+#music-details p { font:600 18px 'Dancing Script',cursive; text-align:center; color:#a0748a; margin:14px 0 2px; }
+@keyframes musicWave { to { height:13px; } }
+@media(max-width:600px) {
+ .music-player { width:164px; right:max(10px,env(safe-area-inset-right)); bottom:max(9px,env(safe-area-inset-bottom)); padding:7px 9px; border-radius:17px; }
+ .music-main { gap:6px; }
+ .music-info { display:none; }
+ .record-button { width:54px; height:54px; }
+ .record { width:48px; height:48px; }
+ .record-label { width:21px; height:21px; font-size:12px; }
+ .record-needle { height:30px; }
+ .music-player .music-play { width:36px; height:36px; }
+ .music-player .music-expand { width:32px; }
+ .music-player:has(#music-details:not([hidden])) { width:min(300px,calc(100vw - 20px)); }
+ .music-player:has(#music-details:not([hidden])) .music-main { justify-content:space-between; }
+}
+@media(prefers-reduced-motion:reduce) { .record,.music-wave i { animation:none; }.record-needle { transition:none; } }
+/* Phone player: comfortable tap targets, readable compact label, safe-area spacing. */
+@media(max-width:600px) {
+ .music-player { width:min(272px,calc(100vw - 24px)); right:max(12px,env(safe-area-inset-right)); bottom:calc(10px + env(safe-area-inset-bottom,0px)); padding:8px 10px; border-radius:40px; box-shadow:0 5px 22px #88506b24,inset 0 1px #fff; }
+ .music-main { gap:8px; }
+ .record-button { width:48px; height:48px; }
+ .record { width:44px; height:44px; }
+ .record-needle { height:27px; }
+ .music-info { display:block; }
+ .music-eyebrow { display:none; }
+ .music-info strong { font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+ .music-status { margin-top:5px; gap:5px; font-size:9px; }
+ #music-status { display:none; }
+ .music-status:after { content:'Chạm để nghe'; white-space:nowrap; }
+ .music-player.playing .music-status:after { content:'Đang phát ♡'; }
+ .music-player .music-play,.music-player .music-expand { width:44px; height:44px; }
+ .music-player .music-expand { margin-left:-4px; }
+ .music-player:has(#music-details:not([hidden])) { width:min(330px,calc(100vw - 24px)); border-radius:22px; padding:12px; }
+ .music-player:has(#music-details:not([hidden])) .music-main { justify-content:initial; }
+ .music-player:has(#music-details:not([hidden])) .music-info strong { font-size:18px; }
+ .music-player:has(#music-details:not([hidden])) #music-status { display:inline; font-size:10px; line-height:1.5; }
+ .music-player:has(#music-details:not([hidden])) .music-status:after { display:none; }
+ .music-volume { min-height:44px; gap:12px; }
+ .music-volume input { height:30px; margin:0; }
+ #music-details p { font-size:18px; margin-top:7px; }
+}
+@media(max-height:500px) and (orientation:landscape) {
+ .music-player { bottom:calc(6px + env(safe-area-inset-bottom,0px)); padding:6px 10px; }
+ .music-player #music-details { margin-top:5px; padding-top:5px; }
+ #music-details p { display:none; }
+}

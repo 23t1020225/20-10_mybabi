@@ -12,15 +12,20 @@
 <body>
 
     <!-- Background Audio -->
-    <audio id="bg-audio" loop preload="auto">
+    <audio id="bg-audio" loop preload="auto" autoplay playsinline>
         <source src="music.m4a" type="audio/mp4">
         <source src="music.aac" type="audio/aac">
     </audio>
 
-    <!-- Music toggle -->
-    <button type="button" class="music-disc-btn" id="music-btn" title="Bật/Tắt nhạc" aria-label="Bật/Tắt nhạc">
-        <span class="disc-icon">🎵</span>
-    </button>
+    <section class="music-player" id="music-player" aria-label="Bài hát dành cho em">
+        <div class="music-main">
+            <button type="button" id="music-btn" class="record-button" aria-label="Phát nhạc" aria-pressed="false"><span class="record"><span class="record-label">♥</span></span><span class="record-needle" aria-hidden="true"></span></button>
+            <div class="music-info"><span class="music-eyebrow">BÀI HÁT DÀNH CHO EM</span><strong>Giai điệu của chúng mình</strong><div class="music-status"><span class="music-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="music-status">Chạm để nghe một chút thương</span></div></div>
+            <button type="button" id="music-play" class="music-play" aria-label="Phát nhạc" aria-pressed="false">▶</button>
+            <button type="button" id="music-expand" class="music-expand" aria-label="Mở điều khiển âm lượng" aria-controls="music-details" aria-expanded="false">☷</button>
+        </div>
+        <div id="music-details" hidden><label class="music-volume"><span aria-hidden="true">♪</span><input id="music-volume" type="range" min="0" max="100" value="65" aria-label="Âm lượng"><output id="music-volume-value" for="music-volume">65%</output></label><p>Một bài hát, dành riêng cho một người ♡</p></div>
+    </section>
 
     <!-- ───────────── STAGE 1: PUZZLE ───────────── -->
     <section id="stage-puzzle" class="stage">
@@ -129,6 +134,7 @@
     <script src="petals.js"></script>
     <script src="tree.js"></script>
     <script src="puzzle.js"></script>
+    <script src="music.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
