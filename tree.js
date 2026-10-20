@@ -176,6 +176,15 @@ class HeartTree {
         this.hitHearts=[];
         const shift=Math.min(1,Math.max(0,(t-7)/1.4));
         const root=590+(mobile?0:250*shift);
+        // Share the same coordinates with the photo layer, including dock resizes.
+        const photoWidth=(mobile?170:130)*sx;
+        const photoLayout={mobile,anchors:(mobile?[[root,270]]:[[root-155,270],[root+145,260],[root,435]]).map(([x,y])=>({left:ox+x*sx-photoWidth/2,top:oy+y*sy,width:photoWidth}))};
+        const layoutKey=JSON.stringify(photoLayout);
+        if(layoutKey!==this.photoLayoutKey) {
+            this.photoLayoutKey=layoutKey;
+            this.canvas.treePhotoLayout=photoLayout;
+            this.canvas.dispatchEvent(new CustomEvent('tree-photo-layout',{detail:photoLayout}));
+        }
         this.drawGround(root,t);
         c.save();
         c.beginPath(); c.rect(0,0,1180,684); c.clip();

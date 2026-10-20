@@ -5,7 +5,7 @@ Chúc công chúa của anh một ngày 20/10 thật vui vẻ và hạnh phúc n
 
 Yêu em nhiều lắmmm, bé yêu của anh ❤️ 🌷 🐻`;
 
-// Photos that auto-cycle inside the letter card (like in video)
+// Photos shown in the album and on the memory tree.
 // Nội dung các ngăn kỷ niệm có thể thay đổi tại đây.
 const KEEPSAKE_NOTE = 'Babii cụa anh, buổi trưa nhớ phải ăn đúng giờ nghe chưa, hong được bỏ bữa kẻo anh lo đó nghenn  ♡';
 const KEEPSAKE_WISHES = ['Ngắm hoàng hôn cùng nhau','Cùng nhau đu trend tíc tóccc', 'Chụp Photobooth', 'Đi ăn mì cayyy', 'Dành một ngày chỉ để ở bên nhau'];
@@ -39,13 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const treeCanvas  = document.getElementById('tree-canvas');
     const letterCard  = document.getElementById('letter-card');
     const letterBody  = document.getElementById('letter-body');
-    const floatPhoto  = document.getElementById('letter-photo-float');
-    const floatImg    = document.getElementById('letter-float-img');
     const viewBtn     = document.getElementById('view-photos-btn');
     const lightbox    = document.getElementById('lightbox-modal');
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxClose = document.getElementById('lightbox-close');
-    stageMain.appendChild(floatPhoto);
     document.querySelector('.letter-footer').appendChild(document.querySelector('.letter-bunny'));
     const characters = Array.from(LETTER_TEXT);
     let textNode;
@@ -55,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const detailContent = document.getElementById('keepsake-content');
     const status = document.getElementById('keepsake-status');
     let rolling = false;
-    let photoEnabled = false;
     let returnFocus = viewBtn;
 
     // ── Start petals during puzzle
@@ -109,53 +105,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 i++;
                 setTimeout(tick, 16);
             } else {
-                // Done → show "Xem" button + start photo float
+                // Letter complete → hang photos on the tree.
                 letterBody.parentElement.scrollTop = 0;
                 rollBtn.hidden = false;
-                startPhotoFloat();
+                startTreePhotos();
             }
         }
         tick();
     }
 
-    // Load each photo before starting its entrance; skip unavailable files.
-    let photoStarted = false;
-    let loadingPhoto = false;
-    async function showPhoto(index) {
-        if (!photoEnabled || loadingPhoto || !PHOTOS.length) return;
-        loadingPhoto = true;
-        floatPhoto.classList.remove('visible');
-        for (let attempt = 0; attempt < PHOTOS.length; attempt++) {
-            const next = (index + attempt) % PHOTOS.length;
-            const image = new Image();
-            image.src = PHOTOS[next];
-            try {
-                await image.decode();
-            } catch {
-                continue;
-            }
-            if (!photoEnabled) { loadingPhoto = false; return; }
-            photoIndex = next;
-            floatImg.src = image.src;
-            floatImg.alt = `Ảnh kỷ niệm ${next + 1}`;
-            // Restart the animation only when the new image is ready.
-            void floatPhoto.offsetWidth;
-            floatPhoto.classList.add('visible');
-            viewBtn.classList.add('visible');
-            loadingPhoto = false;
-            return;
-        }
-        loadingPhoto = false;
-        viewBtn.classList.remove('visible');
-    }
-    function startPhotoFloat() {
-        photoStarted = true;
-        photoEnabled = true;
-        showPhoto(photoIndex);
-    }
-    floatPhoto.addEventListener('animationend', event => {
-        if (event.animationName === 'memoryDrift') showPhoto(photoIndex + 1);
+    const treeMemories = new TreeMemories(treeCanvas, PHOTOS, index => openPhoto(index), index => {
+        photoIndex = index;
+        viewBtn.classList.add('visible');
     });
+    function startTreePhotos() { treeMemories.start(); }
 
     function openPhoto(index = photoIndex) {
         if (!PHOTOS.length) return;
@@ -164,16 +127,15 @@ document.addEventListener('DOMContentLoaded', () => {
         lightboxImg.src = PHOTOS[lightboxIndex];
         lightboxImg.alt = `Ảnh kỷ niệm ${lightboxIndex + 1}`;
         lightbox.classList.add('active');
-        floatPhoto.style.animationPlayState = 'paused';
+        treeMemories.pause();
         lightboxClose.focus();
     }
     function closePhoto() {
         lightbox.classList.remove('active');
-        floatPhoto.style.animationPlayState = 'running';
+        treeMemories.resume();
         if (returnFocus instanceof HTMLElement && returnFocus.isConnected) returnFocus.focus();
     }
     viewBtn.addEventListener('click', () => openPhoto());
-    floatPhoto.addEventListener('click', () => openPhoto());
     lightboxClose.addEventListener('click', closePhoto);
     lightbox.addEventListener('click', e => {
         if (e.target === lightbox) closePhoto();
@@ -189,8 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rolling || rollBtn.hidden || letterCard.hidden) return;
         rolling = true;
         rollBtn.disabled = true;
-        photoEnabled = false;
-        floatPhoto.classList.remove('visible');
+        treeMemories.stop();
         viewBtn.classList.remove('visible');
         letterCard.style.setProperty('--unrolled-height', `${letterCard.getBoundingClientRect().height}px`);
         letterCard.classList.add('rolling-up');
@@ -217,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (name === 'letter') {
             letterCard.hidden = false;
             letterCard.classList.add('visible');
-            startPhotoFloat();
+            startTreePhotos();
             rollBtn.focus();
             status.textContent = 'Đã mở lại lá thư.';
             return;

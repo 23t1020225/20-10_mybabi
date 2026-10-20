@@ -712,3 +712,25 @@ html, body {
  .music-info strong,.music-player:has(#music-details:not([hidden])) .music-info strong { font-size:16px; }
  .music-status,#music-status { font-size:9px; }
 }
+/* Memory photos hang above the living canopy; empty space stays interactive. */
+.tree-memories { position:absolute; inset:0; z-index:3; pointer-events:none; }
+.tree-memory { position:absolute; pointer-events:auto; transform-origin:50% -26px; background:linear-gradient(135deg,#fffdf8,#faf3e9); border:1px solid #dcbfae; border-radius:3px; outline:1px solid #c5968060; outline-offset:-4px; padding:7px 7px 17px; box-shadow:0 5px 12px #75475a2b; cursor:pointer; opacity:0; transform:translateY(150px) scale(.35) rotate(-12deg); }
+.tree-memory img { display:block; width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:1px; pointer-events:none; }
+.tree-memory-string { position:absolute; bottom:100%; left:50%; height:26px; width:1px; background:linear-gradient(#b67593,#d8a3bb); pointer-events:none; }
+.tree-memory-bow { position:absolute; left:50%; top:-13px; transform:translateX(-50%); font-size:26px; line-height:1; pointer-events:none; }
+.tree-memory.arrived { animation:memoryRise 1.25s var(--memory-delay) cubic-bezier(.2,.65,.2,1) both,memorySway 1.8s calc(1.25s + var(--memory-delay)) ease-in-out 2; }
+.tree-memory.departing { animation:memoryLeave .35s ease both; pointer-events:none; }
+.tree-memories.paused .tree-memory { animation-play-state:paused; }
+.tree-memory:focus-visible { outline:2px solid #a54d7d; outline-offset:3px; }
+@keyframes memoryRise { 0% { opacity:0; transform:translateY(150px) scale(.35) rotate(-12deg); } 25% { opacity:1; } 85% { transform:translateY(-5px) scale(1.02) rotate(var(--memory-tilt)); } 100% { opacity:1; transform:translateY(0) scale(1) rotate(var(--memory-tilt)); } }
+@keyframes memorySway { 0%,100% { opacity:1; transform:rotate(var(--memory-tilt)); } 50% { opacity:1; transform:rotate(calc(var(--memory-tilt) + 3deg)); } }
+@keyframes memoryLeave { from { opacity:1; transform:rotate(var(--memory-tilt)) scale(1); } to { opacity:0; transform:translateY(-12px) rotate(var(--memory-tilt)) scale(.85); } }
+@media(max-width:600px) {
+ .tree-memory { padding:5px 5px 12px; }
+ .tree-memory-bow { top:-10px; font-size:20px; }
+ .tree-memory-string { height:20px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .tree-memory.arrived { animation:none; opacity:1; transform:rotate(var(--memory-tilt)); }
+ .tree-memory.departing { animation:none; opacity:0; }
+}
